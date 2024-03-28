@@ -7,4 +7,8 @@ VENV := .venv
 setup: .venv
 
 split:
-	python src/split_datasets.py
+	poetry run python src/split.py
+
+test:
+	poetry run coverage run -m pytest tests -W ignore::DeprecationWarning
+	poetry run coverage report

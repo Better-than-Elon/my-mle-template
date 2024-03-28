@@ -23,4 +23,6 @@ def split(config):
 if __name__ == '__main__':
     config = configparser.ConfigParser()
     config.read('config.ini')
+    print("Splitting data")
     split(config)
+    print("Data is ready")
