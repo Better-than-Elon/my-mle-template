@@ -3,11 +3,7 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 
 
-if __name__ == '__main__':
-    config = configparser.ConfigParser()
-    config.sections()
-    config.read('config.ini')
-
+def split(config):
     data = []
     sep = config['data.raw']['sep']
     for k, path in config['data.raw'].items():
@@ -22,3 +18,9 @@ if __name__ == '__main__':
     y_train.to_csv(config['data.prep']['train_y'], index=False)
     X_test.to_csv(config['data.prep']['test_x'], index=False)
     y_test.to_csv(config['data.prep']['test_y'], index=False)
+
+
+if __name__ == '__main__':
+    config = configparser.ConfigParser()
+    config.read('config.ini')
+    split(config)
