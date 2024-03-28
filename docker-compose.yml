@@ -5,4 +5,4 @@ services:
        command: bash -c "python src/split.py && python src/train.py && python src/predict.py -m LOG_REG -t func && coverage run -m pytest tests -W ignore::DeprecationWarning && coverage report -m"
        ports:
            - 8000:8000
-       image: altairzero/mle-template:latest
+       image: aruko/firstdockerfile:latest
