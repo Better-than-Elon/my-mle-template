@@ -9,7 +9,7 @@ pipeline {
         stage('Cloning repo') {
             steps {
                 echo 'Cloning repo'
-                bat 'rd /s /q my-mle-template'
+                bat 'rd /s /q my-mle-template 2>null'
                 bat 'git clone https://github.com/Better-than-Elon/my-mle-template.git'
                 bat 'cd my-mle-template'
             }
