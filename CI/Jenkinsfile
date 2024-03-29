@@ -1,0 +1,50 @@
+pipeline {
+    agent any
+    
+    environment {
+        DH_CREDS_PSW = credentials('DH_PASS_0')
+    }
+
+    stages {
+        stage('Cloning repo') {
+            steps {
+                echo 'Cloning repo'
+                bat 'rd /s /q my-mle-template'
+                bat 'git clone https://github.com/Better-than-Elon/my-mle-template.git'
+                bat 'cd my-mle-template'
+            }
+        }
+        
+        stage('Building docker') {
+            steps {
+                dir("my-mle-template") {
+                    bat 'docker login -u aruko -p %DH_CREDS_PSW% docker.io'
+                    bat 'docker-compose build'
+                }
+            }
+        }
+        stage('Run docker') {
+            steps {
+                dir("my-mle-template") {
+                    bat 'docker-compose up'
+                    bat 'docker-compose logs -t --tail 10'
+                }
+            }
+        }
+        stage('Push to DockerHub') {
+            steps {
+                dir("my-mle-template") {
+                    bat 'docker push aruko/firstdockerfile:latest'
+                }
+            }
+        }
+    }
+    post {
+        always {
+            dir("my-mle-template") {
+                bat 'docker-compose down 2>null'
+                bat 'docker logout'
+            }
+        }
+    }
+}
