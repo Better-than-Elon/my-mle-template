@@ -1,0 +1,25 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Pull image') {
+            steps {
+                echo 'Updating docker image'
+                bat 'docker pull aruko/firstdockerfile:latest'
+            }
+        }
+        
+        stage('Run container') {
+            steps {
+                bat 'curl https://raw.githubusercontent.com/Better-than-Elon/my-mle-template/main/docker-compose.yml -o docker-compose.yml'
+                bat 'dir'
+                bat 'docker-compose up'
+            }
+        }
+    }
+    post {
+        always {
+            bat 'docker-compose down'
+        }
+    }
+}
