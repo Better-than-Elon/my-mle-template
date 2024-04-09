@@ -2,39 +2,39 @@ pipeline {
     agent any
     
     environment {
-        DH_CREDS_PSW = credentials('DH_PASS_0')
+        DH_CREDS_PSW = credentials('DH_PASS')
     }
 
     stages {
         stage('Cloning repo') {
             steps {
                 echo 'Cloning repo'
-                bat 'rd /s /q my-mle-template 2>null'
-                bat 'git clone https://github.com/Better-than-Elon/my-mle-template.git'
-                bat 'cd my-mle-template'
+                sh 'sudo rm -r -f my-mle-template'
+                sh 'git clone https://github.com/Better-than-Elon/my-mle-template.git'
+                sh 'cd my-mle-template'
             }
         }
         
         stage('Building docker') {
             steps {
                 dir("my-mle-template") {
-                    bat 'docker login -u aruko -p %DH_CREDS_PSW% docker.io'
-                    bat 'docker-compose build'
+                    sh 'sudo docker compose build'
                 }
             }
         }
         stage('Run docker') {
             steps {
                 dir("my-mle-template") {
-                    bat 'docker-compose up'
-                    bat 'docker-compose logs -t --tail 10'
+                    sh 'sudo docker compose up'
+                    sh 'sudo docker compose logs -t --tail 10'
                 }
             }
         }
         stage('Push to DockerHub') {
             steps {
                 dir("my-mle-template") {
-                    bat 'docker push aruko/firstdockerfile:latest'
+                    sh 'sudo docker login -u aruko -p $DH_CREDS_PSW docker.io'
+                    sh 'sudo docker push aruko/firstdockerfile:latest'
                 }
             }
         }
@@ -42,8 +42,9 @@ pipeline {
     post {
         always {
             dir("my-mle-template") {
-                bat 'docker-compose down 2>null'
-                bat 'docker logout'
+                sh 'sudo docker compose down 2>null'
+                sh 'sudo docker logout docker.io'
+                sh 'sudo rm -r -f ../*'
             }
         }
     }
