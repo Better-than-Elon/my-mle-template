@@ -44,6 +44,7 @@ pipeline {
             dir("my-mle-template") {
                 sh 'sudo docker compose down 2>null'
                 sh 'sudo docker logout docker.io'
+                sh 'sudo rm -r -f ../*'
             }
         }
     }
