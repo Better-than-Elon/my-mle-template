@@ -11,7 +11,7 @@ pipeline {
         }
         
         stage('Run container') {
-            steps 
+            steps {
                 sh 'curl https://raw.githubusercontent.com/Better-than-Elon/my-mle-template/main/CD/docker-compose.yml -o docker-compose.yml'
                 sh 'sudo docker compose up'
             }
