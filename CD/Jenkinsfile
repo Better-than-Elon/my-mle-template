@@ -5,6 +5,7 @@ pipeline {
         stage('Pull image') {
             steps {
                 echo 'Updating docker image'
+                sh 'sudo rm -r -f *'
                 sh 'sudo docker pull aruko/firstdockerfile:latest'
             }
         }
