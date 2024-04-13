@@ -5,13 +5,13 @@ pipeline {
         stage('Pull image') {
             steps {
                 echo 'Updating docker image'
-                sh 'sudo rm -r -f *'
                 sh 'sudo docker pull aruko/firstdockerfile:latest'
             }
         }
         
         stage('Run container') {
             steps {
+                sh 'sudo rm -f docker-compose.yml'
                 sh 'curl https://raw.githubusercontent.com/Better-than-Elon/my-mle-template/main/CD/docker-compose.yml -o docker-compose.yml'
                 sh 'sudo docker compose up'
             }
