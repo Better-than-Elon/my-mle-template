@@ -1,7 +1,26 @@
 version: '3.8'
 services:
-   web:
-       image: aruko/firstdockerfile:latest
-       command: bash -c "python src/app.py & pytest tests -W ignore::DeprecationWarning"
-       ports:
-           - 5000:5000
+  oracle-db:
+    image: container-registry.oracle.com/database/free:latest
+    ports:
+      - 1521:1521
+    environment:
+      - ORACLE_PWD
+    healthcheck:
+      test: [ "CMD", "sqlplus", "-L", "system/${ORACLE_PWD}@//localhost:1521/FREE", "@healthcheck.sql" ]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+  web:
+    depends_on:
+      oracle-db:
+        condition: service_healthy
+    build: .
+    environment:
+      - ORACLE_PWD
+    command: bash -c "python src/app.py & pytest tests -W ignore::DeprecationWarning"
+    ports:
+      - 5000:5000
+    image: aruko/firstdockerfile:latest
+    links:
+      - oracle-db:database

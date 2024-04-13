@@ -1,6 +1,10 @@
 pipeline {
     agent any
 
+    environment {
+        ORACLE_PWD = credentials('ORACLE_PWD')
+    }
+
     stages {
         stage('Pull image') {
             steps {
@@ -13,6 +17,7 @@ pipeline {
             steps {
                 sh 'sudo rm -r -f *'
                 sh 'ls'
+                sh 'echo \"ORACLE_PWD=$ORACLE_PWD\" > .env'
                 sh 'curl https://raw.githubusercontent.com/Better-than-Elon/my-mle-template/main/CD/docker-compose.yml -o docker-compose.yml'
                 sh 'ls'
                 sh 'sudo docker compose up'
