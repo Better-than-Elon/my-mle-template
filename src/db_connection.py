@@ -11,7 +11,6 @@ class DB_Connection:
     def __init__(self):
         print("Connecting to db")
         password = os.getenv('ORACLE_PWD')
-        #password=
         host='database'
         self.connection = oracledb.connect(
             user="system",
