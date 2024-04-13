@@ -1,0 +1,3 @@
+from setuptools import setup, find_packages
+
+setup(name='my-mle-template', version='1.0', packages=find_packages())

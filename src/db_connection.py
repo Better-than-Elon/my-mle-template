@@ -11,10 +11,12 @@ class DB_Connection:
     def __init__(self):
         print("Connecting to db")
         password = os.getenv('ORACLE_PWD')
+        #password=
+        host='database'
         self.connection = oracledb.connect(
             user="system",
             password=password,
-            dsn="database:1521/FREE")
+            dsn=f"{host}:1521/FREE")
         # create engine
         self.engine = create_engine('oracle+oracledb://', creator=lambda: self.connection)
         self.cursor = self.connection.cursor()
