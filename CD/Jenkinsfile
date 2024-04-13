@@ -20,7 +20,7 @@ pipeline {
                 sh 'echo \"ORACLE_PWD=$ORACLE_PWD\" > .env'
                 sh 'curl https://raw.githubusercontent.com/Better-than-Elon/my-mle-template/main/CD/docker-compose.yml -o docker-compose.yml'
                 sh 'ls'
-                sh 'sudo docker compose up'
+                sh 'sudo docker compose up web'
             }
         }
     }
