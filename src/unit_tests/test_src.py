@@ -6,7 +6,6 @@ from src.train import Trainer
 from src.predict import Predictor
 import numpy as np
 import shutil
-import sys
 
 
 @pytest.fixture(autouse=True)
