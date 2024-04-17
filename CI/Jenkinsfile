@@ -4,6 +4,7 @@ pipeline {
     environment {
         DH_CREDS_PSW = credentials('DH_PASS')
         ORACLE_PWD = credentials('ORACLE_PWD')
+        ANSIBLE_PASS = credentials('ANSIBLE_PASS')
     }
 
     stages {
@@ -20,6 +21,7 @@ pipeline {
             steps {
                 dir("my-mle-template") {
                     sh 'echo \"ORACLE_PWD=$ORACLE_PWD\" > .env'
+                    sh 'echo \"$ANSIBLE_PASS\" > ansible-vault.txt'
                     sh 'sudo docker compose build'
                 }
             }

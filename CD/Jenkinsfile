@@ -3,6 +3,7 @@ pipeline {
 
     environment {
         ORACLE_PWD = credentials('ORACLE_PWD')
+        ANSIBLE_PASS = credentials('ANSIBLE_PASS')
     }
 
     stages {
@@ -18,6 +19,7 @@ pipeline {
                 sh 'sudo rm -r -f *'
                 sh 'ls'
                 sh 'echo \"ORACLE_PWD=$ORACLE_PWD\" > .env'
+                sh 'echo \"$ANSIBLE_PASS\" > ansible-vault.txt'
                 sh 'curl https://raw.githubusercontent.com/Better-than-Elon/my-mle-template/main/CD/docker-compose.yml -o docker-compose.yml'
                 sh 'ls'
                 sh 'sudo docker compose up web'
