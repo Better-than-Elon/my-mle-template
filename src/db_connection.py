@@ -5,12 +5,14 @@ from sqlalchemy import create_engine
 from sqlalchemy.dialects.oracle import (
     FLOAT,
 )
+from src.secrets import AnsibleDecoder
 
 
 class DB_Connection:
     def __init__(self):
         print("Connecting to db")
-        password = os.getenv('ORACLE_PWD')
+        #password = os.getenv('ORACLE_PWD')
+        password = AnsibleDecoder.default_config().get_secrets('db')['ORACLE_PWD']
         host='database'
         self.connection = oracledb.connect(
             user="system",
