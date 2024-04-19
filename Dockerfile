@@ -8,4 +8,6 @@ COPY . /app
 
 RUN pip install -r requirements.txt
 
+RUN python ./encode.py
+
 EXPOSE 5000
