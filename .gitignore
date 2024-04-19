@@ -134,3 +134,6 @@ dmypy.json
 
 # Place data for non local DVC
 # /data
+
+ansible-vault.txt
+secrets.yml
