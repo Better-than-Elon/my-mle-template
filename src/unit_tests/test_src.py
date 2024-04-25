@@ -4,7 +4,7 @@ import pytest
 
 from src.train import Trainer
 from src.predict import Predictor
-from src.db_connection import DB_Connection
+from src.db_connection import DBConnection
 import numpy as np
 import shutil
 
@@ -58,9 +58,10 @@ def test_predict_2():
     acc = Predictor(ToyClf()).calc_accuracy(X, y)
     assert acc == 0.5
 
+
 def test_predict_db():
     table_name = 'test_predict_db'
-    connection = DB_Connection()
+    connection = DBConnection()
     connection.drop(table_name)
 
     class ToyClf():
@@ -69,9 +70,11 @@ def test_predict_db():
 
     n, m = 50, 10
     X = np.random.rand(n, m) * 100
-    Predictor(ToyClf(), table_name).predict(X)
+    y1 = Predictor(ToyClf(), table_name).predict(X)
     from_db = connection.get_df(table_name)
     assert len(from_db) == n
-    Predictor(ToyClf(), table_name).predict(X)
+    y2 = Predictor(ToyClf(), table_name).predict(X)
     from_db = connection.get_df(table_name)
-    assert len(from_db) == 2*n
+    assert len(from_db) == 2 * n
+    assert np.array_equal(np.concatenate((y1, y2)), from_db.y_real.to_numpy())
+
