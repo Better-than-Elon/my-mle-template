@@ -2,14 +2,13 @@ import configparser
 import pandas as pd
 from joblib import load
 from sklearn.metrics import accuracy_score
-from src.db_connection import DB_Connection
+from src.kafka_connection import KafkaSingleConnection
 
 
 class Predictor:
     def __init__(self, clf, log_db_table_name='predicts') -> None:
         self.clf = clf
         self.log_db_table_name = log_db_table_name
-        self.connection = DB_Connection()
 
 
     @classmethod
@@ -19,8 +18,10 @@ class Predictor:
 
     def predict(self, X_test):
         y_pred = self.clf.predict(X_test)
-        self.connection.append_df(pd.DataFrame(data={"y_real":y_pred}), self.log_db_table_name)
-        return self.clf.predict(X_test)
+        connection = KafkaSingleConnection(self.log_db_table_name, 1)
+        connection.send(y_pred.tolist())
+        connection.close()
+        return y_pred
 
     def calc_accuracy(self, X_test, y_test) -> float:
         y_pred = self.clf.predict(X_test)
@@ -37,3 +38,4 @@ if __name__ == '__main__':
     predictor = Predictor.from_config(config)
     predictor.predict(X_test)
     print(predictor.calc_accuracy(X_test, y_test))
+

@@ -8,7 +8,7 @@ from sqlalchemy.dialects.oracle import (
 from src.secrets import AnsibleDecoder
 
 
-class DB_Connection:
+class DBConnection:
     def __init__(self):
         print("Connecting to db")
         #password = os.getenv('ORACLE_PWD')
@@ -43,15 +43,19 @@ class DB_Connection:
         query = f"SELECT * FROM {table_name}"
         return pd.read_sql(query, self.engine)
 
+    def close(self):
+        self.connection.close()
+
 
 if __name__ == '__main__':
-    connection = DB_Connection()
+    connection = DBConnection()
     df = pd.read_csv('data/test_X.csv')
     connection.drop('test')
     connection.append_df(df, 'test')
     connection.append_df(df, 'test')
     df_get = connection.get_df('test')
     connection.drop('test')
-    connection = DB_Connection()
-    connection = DB_Connection()
+    connection = DBConnection()
+    connection = DBConnection()
     print(len(df), len(df_get))
+
